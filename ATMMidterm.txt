@@ -1,0 +1,122 @@
+using System;
+using System.IO;
+
+namespace ATMProgram
+{
+    internal class Program
+    {
+        static string filePath = "C:\\Users\\Giorgi\\Desktop\\STEP\\AccountDetails.txt"; // File to store account info
+        static double balance;
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to the ATM!");
+
+            // Load balance from the file
+            LoadAccountDetails();
+
+            while (true)
+            {
+                Console.WriteLine("\nChoose an operation:");
+                Console.WriteLine("1. Check Balance");
+                Console.WriteLine("2. Deposit Money");
+                Console.WriteLine("3. Withdraw Money");
+                Console.WriteLine("4. Exit");
+
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        CheckBalance();
+                        break;
+                    case "2":
+                        DepositMoney();
+                        break;
+                    case "3":
+                        WithdrawMoney();
+                        break;
+                    case "4":
+                        SaveAccountDetails();
+                        Console.WriteLine("Thank you for using the ATM. Goodbye!");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        // Load balance from the file
+        static void LoadAccountDetails()
+        {
+            if (File.Exists(filePath))
+            {
+                string fileContent = File.ReadAllText(filePath);
+                if (double.TryParse(fileContent, out balance))
+                {
+                    Console.WriteLine("Account details loaded successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Error reading account details. Starting with a balance of $0.");
+                    balance = 0;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No account details found. Starting with a balance of $0.");
+                balance = 0;
+            }
+        }
+
+        // Save balance back to the file
+        static void SaveAccountDetails()
+        {
+            File.WriteAllText(filePath, balance.ToString());
+            Console.WriteLine("Account details saved successfully.");
+        }
+
+        // Check balance
+        static void CheckBalance()
+        {
+            Console.WriteLine($"\nYour current balance is: ${balance:F2}");
+        }
+
+        // Deposit money
+        static void DepositMoney()
+        {
+            Console.WriteLine("\nEnter the amount you want to deposit:");
+            if (double.TryParse(Console.ReadLine(), out double depositAmount) && depositAmount > 0)
+            {
+                balance += depositAmount;
+                Console.WriteLine($"Successfully deposited ${depositAmount:F2}. Your new balance is: ${balance:F2}");
+            }
+            else
+            {
+                Console.WriteLine("Invalid amount. Please try again.");
+            }
+        }
+
+        // Withdraw money
+        static void WithdrawMoney()
+        {
+            Console.WriteLine("\nEnter the amount you want to withdraw:");
+            if (double.TryParse(Console.ReadLine(), out double withdrawAmount) && withdrawAmount > 0)
+            {
+                if (withdrawAmount <= balance)
+                {
+                    balance -= withdrawAmount;
+                    Console.WriteLine($"Successfully withdrew ${withdrawAmount:F2}. Your new balance is: ${balance:F2}");
+                }
+                else
+                {
+                    Console.WriteLine("Insufficient balance. Please try again.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid amount. Please try again.");
+            }
+        }
+    }
+}

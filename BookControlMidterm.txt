@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+
+namespace BookManagerApp
+{
+    // Class to represent a Book
+    public class Book
+    {
+        // Properties: Title, Author, ReleaseYear
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int ReleaseYear { get; set; }
+
+        // Constructor to initialize a Book
+        public Book(string title, string author, int releaseYear)
+        {
+            Title = title;
+            Author = author;
+            ReleaseYear = releaseYear;
+        }
+
+        // Method to display book details as a string
+        public override string ToString()
+        {
+            return $"Title: {Title}, Author: {Author}, Release Year: {ReleaseYear}";
+        }
+    }
+
+    // Manager class to handle all operations related to books
+    public class BookManager
+    {
+        // List to store books
+        private List<Book> books = new List<Book>();
+
+        // Method to add a new book
+        public void AddBook(string title, string author, int releaseYear)
+        {
+            // Check for duplicates before adding
+            foreach (var book in books)
+            {
+                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("A book with this title already exists. Cannot add duplicate.");
+                    return;
+                }
+            }
+
+            // Add the book if it's unique
+            books.Add(new Book(title, author, releaseYear));
+            Console.WriteLine("Book added successfully!");
+        }
+
+        // Method to display all books
+        public void ShowAllBooks()
+        {
+            if (books.Count == 0)
+            {
+                Console.WriteLine("No books found in the list.");
+                return;
+            }
+
+            Console.WriteLine("\nAll Books in the List:");
+            foreach (var book in books)
+            {
+                Console.WriteLine(book);
+            }
+        }
+
+        // Method to search for a book by title
+        public void SearchBookByTitle(string title)
+        {
+            bool found = false;
+            foreach (var book in books)
+            {
+                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Book found: " + book);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("No book found with the title: " + title);
+            }
+        }
+    }
+
+    // Main program
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            BookManager bookManager = new BookManager();
+            while (true)
+            {
+                Console.WriteLine("\n--- Book Manager ---");
+                Console.WriteLine("1. Add a New Book");
+                Console.WriteLine("2. Show All Books");
+                Console.WriteLine("3. Search for a Book by Title");
+                Console.WriteLine("4. Exit");
+                Console.Write("Choose an option: ");
+
+                // Validate menu choice
+                if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > 4)
+                {
+                    Console.WriteLine("Invalid input. Please enter a number between 1 and 4.");
+                    continue;
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        // Add a new book
+                        Console.WriteLine("\nEnter the book's title:");
+                        string title;
+                        while (string.IsNullOrWhiteSpace(title = Console.ReadLine()))
+                        {
+                            Console.WriteLine("Title cannot be empty. Please enter a valid title:");
+                        }
+
+                        Console.WriteLine("Enter the author's name:");
+                        string author;
+                        while (string.IsNullOrWhiteSpace(author = Console.ReadLine()))
+                        {
+                            Console.WriteLine("Author cannot be empty. Please enter a valid author:");
+                        }
+
+                        Console.WriteLine("Enter the release year:");
+                        int releaseYear;
+                        while (!int.TryParse(Console.ReadLine(), out releaseYear) || releaseYear <= 0 || releaseYear > DateTime.Now.Year)
+                        {
+                            Console.WriteLine("Invalid year. Please enter a valid year (greater than 0 and less than or equal to the current year):");
+                        }
+
+                        bookManager.AddBook(title, author, releaseYear);
+                        break;
+
+                    case 2:
+                        // Show all books
+                        bookManager.ShowAllBooks();
+                        break;
+
+                    case 3:
+                        // Search for a book by title
+                        Console.WriteLine("\nEnter the title of the book to search:");
+                        string searchTitle;
+                        while (string.IsNullOrWhiteSpace(searchTitle = Console.ReadLine()))
+                        {
+                            Console.WriteLine("Title cannot be empty. Please enter a valid title:");
+                        }
+
+                        bookManager.SearchBookByTitle(searchTitle);
+                        break;
+
+                    case 4:
+                        // Exit the program
+                        Console.WriteLine("Goodbye!");
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        break;
+                }
+            }
+        }
+    }
+}

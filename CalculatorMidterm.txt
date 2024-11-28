@@ -1,0 +1,143 @@
+using System.Diagnostics.CodeAnalysis;
+
+namespace CalculatorMidterm
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            double num1, num2;
+            Console.WriteLine("Would you like to use the calculator? (y/n)");
+            string input = Console.ReadLine();
+            while (true)
+            {
+                if (input == "y" || input == "Y" || input == "yes" || input == "Yes")
+                {
+                    Console.WriteLine("Welcome to Calculator!");
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("Enter the first number: ");
+                    while (true)
+                    {
+                        if (double.TryParse(Console.ReadLine(), out num1))
+                        {
+                            Console.WriteLine("Your first number is: " + num1);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input!");
+                            Console.WriteLine("Try again: ");
+                        }
+                    }
+
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("Now, enter the second number: ");
+
+                    while (true)
+                    {
+                        if (double.TryParse(Console.ReadLine(), out num2))
+                        {
+                            Console.WriteLine("Your second number is: " + num2);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input!");
+                            Console.WriteLine("Try again: ");
+                        }
+                    }
+
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("Now, choose what happens to these two numbers.");
+                    Console.WriteLine("+, -, * or /");
+                    input = Console.ReadLine();
+                    while (true)
+                    {
+                        if (input == "+")
+                        {
+                            double sum = num1 + num2;
+                            Console.WriteLine("-------------------------------------------");
+                            Console.WriteLine("The sum of these two numbers is: " + sum);
+                            break;
+
+                        }
+                        else if (input == "-")
+                        {
+                            double subtraction = num1 - num2;
+                            Console.WriteLine("-------------------------------------------");
+                            Console.WriteLine("The subtraction of these two numbers is: " + subtraction);
+                            break;
+                        }
+                        else if (input == "*")
+                        {
+                            double multiplication = num1 * num2;
+                            Console.WriteLine("-------------------------------------------");
+                            Console.WriteLine("Multiplication of these two numbers gives us: " + multiplication);
+                            break;
+                        }
+                        else if (input == "/")
+                        {
+                            if (num2 == 0)
+                            {
+                                Console.WriteLine("Second number is 0, we can not divide, would you like to change it? (y/n)");
+                                input = Console.ReadLine();
+                                while (true)
+                                {
+                                    if (input == "y" || input == "Y" || input == "yes" || input == "Yes")
+                                    {
+                                        Console.WriteLine("What would you like to change it to?");
+                                        while (true)
+                                        {
+                                            if (double.TryParse(Console.ReadLine(), out num2) && num2 != 0)
+                                            {
+                                                Console.WriteLine("Your new second number is: " + num2);
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Invalid input!");
+                                                Console.WriteLine("Try again: ");
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    else if (input == "n" || input == "N" || input == "no" || input == "No")
+                                    {
+                                        Console.WriteLine("It is not possible to divide by 0, goodbye.");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid input, try again: ");
+                                        input = Console.ReadLine();
+                                    }
+                                }
+                            }
+                            double division = num1 / num2;
+                            Console.WriteLine("-------------------------------------------");
+                            Console.WriteLine("Division of these two numbers gives us: " + division);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input!");
+                            Console.WriteLine("Please choose between addition, subtraction, multiplication or division> (+, -, *, /)");
+                            input = Console.ReadLine();
+                        }
+                    }
+                    break;
+                }
+                else if (input == "n" || input == "N" || input == "no" || input == "No")
+                {
+                    Console.WriteLine("Nice knowing ya!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Provide an answer in a correct form: ");
+                    input = Console.ReadLine();
+                }
+            }
+        }
+    }
+}
